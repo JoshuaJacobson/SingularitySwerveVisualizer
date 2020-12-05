@@ -41,6 +41,14 @@ public class GuiControls {
         });
     }
 
+    public double getLength() {
+        return Double.parseDouble(robotLength.getText());
+    }
+
+    public double getWidth() {
+        return Double.parseDouble(robotWidth.getText());
+    }
+
     public Pane getPane() {
         GridPane pane = new GridPane();
 
