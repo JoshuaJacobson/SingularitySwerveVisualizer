@@ -5,17 +5,8 @@ import data.WheelLocation;
 import gui.FieldRenderer;
 import gui.GuiControls;
 import javafx.application.Application;
-import javafx.beans.binding.Bindings;
-import javafx.geometry.Side;
-import javafx.scene.paint.Color;
 import javafx.scene.Scene;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import robot.Robot;
 import robot.RobotLocation;
@@ -74,7 +65,7 @@ public class SingularitySwerveVisualizer extends Application {
         controls = new GuiControls();
         plane.add(controls.getPane(), 0, 0);
 
-        robot = new Robot(20.0, 10.0);
+        robot = new Robot(controls.getLength(), controls.getWidth());
         originalLocation = new RobotLocation(robot)
             .setWheel(WheelLocation.BackLeft, new Point(-5, -10))
             .setWheel(WheelLocation.BackRight, new Point(5, -10))
