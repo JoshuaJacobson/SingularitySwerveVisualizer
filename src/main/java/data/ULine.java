@@ -11,7 +11,7 @@ public class ULine {
     public boolean equalsLength(double length) {
         return Math.abs(this.getLength() - length) < MAX_LENGTH_DIFF;
     }
-    private double getLength() {
+    public double getLength() {
         return Math.sqrt(
             Math.pow(source.getX() - destination.getX(), 2) +
             Math.pow(source.getY() - destination.getY(), 2)

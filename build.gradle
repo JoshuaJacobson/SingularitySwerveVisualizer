@@ -3,6 +3,10 @@ plugins {
   id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
+dependencies {
+  testCompile "junit:junit:4.11"
+}
+
 repositories {
     mavenCentral()
 }
