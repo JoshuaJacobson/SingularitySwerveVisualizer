@@ -49,6 +49,18 @@ public class GuiControls {
         return Double.parseDouble(robotWidth.getText());
     }
 
+    public double getX() {
+        return Double.parseDouble(robotX.getText());
+    }
+
+    public double getY() {
+        return Double.parseDouble(robotY.getText());
+    }
+
+    public double getRotate() {
+        return Double.parseDouble(robotRotate.getText());
+    }
+
     public Pane getPane() {
         GridPane pane = new GridPane();
 
