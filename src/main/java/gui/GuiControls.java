@@ -58,7 +58,7 @@ public class GuiControls {
     }
 
     public double getRotate() {
-        return Double.parseDouble(robotRotate.getText());
+        return Math.toRadians(Double.parseDouble(robotRotate.getText()));
     }
 
     public Pane getPane() {

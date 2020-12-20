@@ -8,6 +8,7 @@ import data.Point;
 import data.ULine;
 import data.Wheel;
 import data.WheelLocation;
+import javafx.scene.paint.Color;
 
 public class RobotLocation {
     private Robot robot;
@@ -37,10 +38,10 @@ public class RobotLocation {
     public ULine[] renderPaths(RobotLocation target) {
         ULine[] lines = new ULine[4];
         try {
-            lines[0] = renderLinePath(WheelLocation.FrontLeft, target);
-            lines[1] = renderLinePath(WheelLocation.BackLeft, target);
-            lines[2] = renderLinePath(WheelLocation.BackRight, target);
-            lines[3] = renderLinePath(WheelLocation.FrontRight, target);
+            lines[0] = renderLinePath(WheelLocation.FrontLeft, target, Color.RED);
+            lines[1] = renderLinePath(WheelLocation.BackLeft, target, Color.PURPLE);
+            lines[2] = renderLinePath(WheelLocation.BackRight, target, Color.BLUE);
+            lines[3] = renderLinePath(WheelLocation.FrontRight, target, Color.GREEN);
         } catch (Exception e) {
             System.err.println("Could not render, internal issue with Wheels");
         }
@@ -67,10 +68,10 @@ public class RobotLocation {
             isWheelDistance(WheelLocation.FrontRight, WheelLocation.FrontLeft, robot.getWidth());
     }
     private ULine renderLine(WheelLocation source, WheelLocation dest) throws Exception {
-        return getWheel(source).lineToWheel(getWheel(dest));
+        return getWheel(source).lineToWheel(getWheel(dest), Color.BLACK);
     }
-    private ULine renderLinePath(WheelLocation source, RobotLocation target) throws Exception {
-        return getWheel(source).lineToWheel(target.getWheel(source));
+    private ULine renderLinePath(WheelLocation source, RobotLocation target, Color color) throws Exception {
+        return getWheel(source).lineToWheel(target.getWheel(source), color);
     }
     private boolean isWheelDistance(WheelLocation source, WheelLocation dest, double length) {
         try {

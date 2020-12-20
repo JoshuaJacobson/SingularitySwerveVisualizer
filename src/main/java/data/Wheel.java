@@ -1,5 +1,7 @@
 package data;
 
+import javafx.scene.paint.Color;
+
 public class Wheel {
     private WheelLocation location;
     private Point position;
@@ -13,10 +15,11 @@ public class Wheel {
     public boolean isLocation(WheelLocation location) {
         return this.location == location;
     }
-    public ULine lineToWheel(Wheel wheel) {
+    public ULine lineToWheel(Wheel wheel, Color color) {
         return new ULine(
             this.position,
-            wheel.position
+            wheel.position,
+            color
         );
     }
     public Point getPosition() {

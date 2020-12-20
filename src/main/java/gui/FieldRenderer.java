@@ -59,7 +59,9 @@ public class FieldRenderer {
         double stopX = (line.getDest().getX() * 2.5) + 250;
         double stopY = (-line.getDest().getY() * 2.5) + 250;
 
-        return new Line(startX, startY, stopX, stopY);
+        Line res = new Line(startX, startY, stopX, stopY);
+        res.setStroke(line.getColor());
+        return res;
     }
 
     class Axes extends Pane {
