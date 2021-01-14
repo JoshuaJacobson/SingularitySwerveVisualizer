@@ -63,6 +63,15 @@ public class SingularitySwerveVisualizer extends Application {
         return (Math.sqrt((Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2))));
     }
 
+    private static double getAngleIfStill(double xNext, double yNext, double xCurr, double yCurr, double height, double width){
+        if(xNext == xCurr && yNext == yCurr){ //check to see if robot is stationary
+            return Math.toDegrees(Math.atan(width / height)) + 90;
+        }
+        else{ //if the robot isn't stationary
+            return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr)));
+        }
+    }
+
     public static void customCodeHere() {
 
         double size = 1.0;
@@ -98,6 +107,9 @@ public class SingularitySwerveVisualizer extends Application {
         double mFL_Offset_Angle = mBR_Offset_Angle + Math.PI; // complement ( +180 degrees ) of the first one
         double mBL_Offset_Angle = mFR_Offset_Angle + Math.PI; // " " but of the second one
 
+
+
+
         double mFL_XPos_Next = horizontal
                 + (midToOutSize * Math.cos(-(rotation * rotationSpeedConstant) - mFL_Offset_Angle));
         double mFL_YPos_Next = vertical
@@ -118,17 +130,26 @@ public class SingularitySwerveVisualizer extends Application {
         double mBR_YPos_Next = vertical
                 + (midToOutSize * Math.sin(-(rotation * rotationSpeedConstant) - mBR_Offset_Angle));
 
+
+        
+
         // Angle adjusting motors will set the wheels to be pointed to the angle of
         // these slopes:
-        double mFL_Angle = Math.atan((mFL_YPos_Next - mFL_YPos_Curr) / (mFL_XPos_Next - mFL_XPos_Curr));
-        double mFR_Angle = Math.atan((mFR_YPos_Next - mFR_YPos_Curr) / (mFR_XPos_Next - mFR_XPos_Curr));
-        double mBL_Angle = Math.atan((mBL_YPos_Next - mBL_YPos_Curr) / (mBL_XPos_Next - mBL_XPos_Curr));
-        double mBR_Angle = Math.atan((mBR_YPos_Next - mBR_YPos_Curr) / (mBR_XPos_Next - mBR_XPos_Curr));
+        //double mFL_Angle = Math.atan((mFL_YPos_Next - mFL_YPos_Curr) / (mFL_XPos_Next - mFL_XPos_Curr));
+        double mFL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, robotWidth, robotHeight);
+        double mFR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, robotHeight, robotWidth);
+        double mBL_Angle = mFR_Angle + 180;
+        double mBR_Angle = mFL_Angle + 180;
 
         double mFR_Distance = distance(mFR_XPos_Curr, mFR_YPos_Curr, mFR_XPos_Next, mFR_YPos_Next);
         double mFL_Distance = distance(mFL_XPos_Curr, mFL_YPos_Curr, mFL_XPos_Next, mFL_YPos_Next);
         double mBL_Distance = distance(mBL_XPos_Curr, mBL_YPos_Curr, mBL_XPos_Next, mBL_YPos_Next);
         double mBR_Distance = distance(mBR_XPos_Curr, mBR_YPos_Curr, mBR_XPos_Next, mBR_YPos_Next);
+
+        System.out.println(mFL_Angle);
+        System.out.println(mFR_Angle);
+        System.out.println(mBL_Angle);
+        System.out.println(mBR_Angle);
 
         plane = new GridPane();
 
