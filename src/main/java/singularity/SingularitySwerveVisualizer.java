@@ -62,6 +62,37 @@ public class SingularitySwerveVisualizer extends Application {
 
         startNanoTime = System.nanoTime();
 
+        EventHandler<KeyEvent> eventHandler = new EventHandler<KeyEvent>() { 
+                @Override 
+                public void handle(KeyEvent event) {
+                        boolean pressed = event.getEventType() == KeyEvent.KEY_PRESSED;
+                        switch (event.getCode()) {
+                                case W:
+                                        currentY=pressed?1:0;
+                                        break;
+                                case A:
+                                        currentX=pressed?-1:0;
+                                        break;
+                                case S:
+                                        currentY=pressed?-1:0;
+                                        break;
+                                case D:
+                                        currentX=pressed?1:0;
+                                        break;
+                                case K:
+                                        currentRotate=pressed?Math.PI/8.0:0;
+                                        break;
+                                case L:
+                                        currentRotate=pressed?-Math.PI/8.0:0;
+                                        break;
+                                default:
+                                        break;
+                        }
+                }           
+        };
+        stage.addEventHandler(KeyEvent.KEY_PRESSED, eventHandler);
+        stage.addEventHandler(KeyEvent.KEY_RELEASED, eventHandler);
+
         new AnimationTimer()
         {
             public void handle(long currentNanoTime)
@@ -95,6 +126,7 @@ public class SingularitySwerveVisualizer extends Application {
         double horizontal = currentX;
         double vertical = currentY;
         double rotation = currentRotate;
+        System.out.println(currentX);
 
         double halfRobotWidth = ROBOT_WIDTH / 2;
         double halfRobotHeight = ROBOT_WIDTH / 2;
