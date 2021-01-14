@@ -102,4 +102,7 @@ public class RobotLocation {
         }
         throw new Exception("Wheel not found");
     }
+    Wheel[] getWheels() {
+        return wheels;
+    }
 }
