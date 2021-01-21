@@ -46,7 +46,9 @@ public class Robot {
         // Calculate Acceleration for all wheels
         Point resultantVector = new Point(0, 0);
         for (Wheel wheel : wheels) {
-            resultantVector = resultantVector.add(wheel.getPosition());
+            if(wheel.getPosition().length() <= 0.001){
+                resultantVector = resultantVector.add(wheel.getPosition());
+            } 
         }
         resultantVector = new Point(resultantVector.getX() / 4.0, resultantVector.getY() / 4.0);
         if (Math.abs(resultantVector.getX()) < 0.001)
@@ -57,7 +59,11 @@ public class Robot {
         // Calculate the rotational moment
         double rotation = 0;
         for (Wheel wheel : wheels) {
-            if (resultantVector.getX() == 0 && resultantVector.getY() == 0) {
+
+            if(wheel.getPosition().length() <= 0.001){
+
+            }
+            else if (resultantVector.getX() == 0 && resultantVector.getY() == 0) {
                 double local_rotation = 0;
                 switch (wheel.getLocation()) {
                     case BackLeft:
@@ -81,6 +87,7 @@ public class Robot {
             }
         }
         rotation /= 4.0;
+        
 
         // Calculate our new velocity
         resultantVector = new Point(resultantVector.getX() + velocityVector.getX(),
