@@ -25,8 +25,6 @@ public class SingularitySwerveVisualizer extends Application {
     private static GridPane plane;
     private static GuiControls controls;
     private static Robot robot;
-    private static RobotLocation originalLocation;
-    private static RobotLocation newLocation;
     private static FieldRenderer renderer;
     private static Pane lines;
     private static long startNanoTime;
@@ -102,6 +100,7 @@ public class SingularitySwerveVisualizer extends Application {
                 Wheel[] wheels = customCodeHere();
                 robot.applyWheels(wheels);
                 robot.move(t);
+                System.out.println(robot);
                 renderer = new FieldRenderer().addLines(robot.render().render());
                 lines = renderer.render();
                 pane.getChildren().clear();
@@ -126,7 +125,6 @@ public class SingularitySwerveVisualizer extends Application {
         double horizontal = currentX;
         double vertical = currentY;
         double rotation = currentRotate;
-        System.out.println(currentX);
 
         double halfRobotWidth = ROBOT_WIDTH / 2;
         double halfRobotHeight = ROBOT_WIDTH / 2;
