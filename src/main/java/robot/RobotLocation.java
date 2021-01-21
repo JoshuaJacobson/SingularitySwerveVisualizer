@@ -94,7 +94,7 @@ public class RobotLocation {
         }
         return wheels;
     }
-    private Wheel getWheel(WheelLocation location) throws Exception {
+    Wheel getWheel(WheelLocation location) throws Exception {
         for (Wheel w: wheels) {
             if (w.isLocation(location)) {
                 return w;
