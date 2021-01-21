@@ -66,16 +66,16 @@ public class SingularitySwerveVisualizer extends Application {
                         boolean pressed = event.getEventType() == KeyEvent.KEY_PRESSED;
                         switch (event.getCode()) {
                                 case W:
-                                        currentY=pressed?1:0.1;
+                                        currentY=pressed?1:0;
                                         break;
                                 case A:
-                                        currentX=pressed?-1:0.1;
+                                        currentX=pressed?-1:0;
                                         break;
                                 case S:
-                                        currentY=pressed?-1:0.1;
+                                        currentY=pressed?-1:0;
                                         break;
                                 case D:
-                                        currentX=pressed?1:0.1;
+                                        currentX=pressed?1:0;
                                         break;
                                 case K:
                                         currentRotate=pressed?Math.PI/8.0:0;
