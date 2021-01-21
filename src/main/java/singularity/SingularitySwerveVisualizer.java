@@ -98,10 +98,10 @@ public class SingularitySwerveVisualizer extends Application {
                 double t = (currentNanoTime - startNanoTime) / 1000000000.0; 
                 startNanoTime = currentNanoTime;
                 Wheel[] wheels = customCodeHere();
-                robot.applyWheels(wheels);
+                ULine[] wheelLines = robot.applyWheels(wheels);
                 robot.move(t);
                 System.out.println(robot);
-                renderer = new FieldRenderer().addLines(robot.render().render());
+                renderer = new FieldRenderer().addLines(robot.render().render()).addLines(wheelLines);
                 lines = renderer.render();
                 pane.getChildren().clear();
                 pane.getChildren().addAll(lines);
