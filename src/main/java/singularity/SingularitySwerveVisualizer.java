@@ -28,7 +28,7 @@ public class SingularitySwerveVisualizer extends Application {
     private static FieldRenderer renderer;
     private static Pane lines;
     private static long startNanoTime;
-    private static final double ROBOT_LENGTH = 12.0;
+    private static final double ROBOT_LENGTH = 15.0;
     private static final double ROBOT_WIDTH = 15.0;
     private static double currentX;
     private static double currentY;
@@ -66,16 +66,16 @@ public class SingularitySwerveVisualizer extends Application {
                         boolean pressed = event.getEventType() == KeyEvent.KEY_PRESSED;
                         switch (event.getCode()) {
                                 case W:
-                                        currentY=pressed?1:0;
+                                        currentY=pressed?1:0.1;
                                         break;
                                 case A:
-                                        currentX=pressed?-1:0;
+                                        currentX=pressed?-1:0.1;
                                         break;
                                 case S:
-                                        currentY=pressed?-1:0;
+                                        currentY=pressed?-1:0.1;
                                         break;
                                 case D:
-                                        currentX=pressed?1:0;
+                                        currentX=pressed?1:0.1;
                                         break;
                                 case K:
                                         currentRotate=pressed?Math.PI/8.0:0;
@@ -118,9 +118,9 @@ public class SingularitySwerveVisualizer extends Application {
         return (Math.sqrt((Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2))));
     }
 
-    private static double getAngleIfStill(double xNext, double yNext, double xCurr, double yCurr, double height, double width){
+    private static double getAngleIfStill(double xNext, double yNext, double xCurr, double yCurr, double height, double width, double angleAdd){
         if(xNext == xCurr && yNext == yCurr){ //check to see if robot is stationary
-            return Math.toDegrees(Math.atan(width / height)) + 90;
+            return Math.toDegrees(Math.atan(width / height)) + angleAdd;
         }
         else{ //if the robot isn't stationary
             return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr)));
@@ -134,7 +134,11 @@ public class SingularitySwerveVisualizer extends Application {
 
         double horizontal = currentX;
         double vertical = currentY;
-        double rotation = currentRotate;
+        double rotation = 0;
+        System.out.println(currentX);
+        //double horizontal = 10;
+        //double vertical = -10;
+
 
         double halfRobotWidth = ROBOT_WIDTH / 2;
         double halfRobotHeight = ROBOT_WIDTH / 2;
@@ -159,8 +163,6 @@ public class SingularitySwerveVisualizer extends Application {
         double mFR_Offset_Angle = -mBR_Offset_Angle; // " " but negative
         double mFL_Offset_Angle = mBR_Offset_Angle + Math.PI; // complement ( +180 degrees ) of the first one
         double mBL_Offset_Angle = mFR_Offset_Angle + Math.PI; // " " but of the second one
-
-
 
 
         double mFL_XPos_Next = horizontal
@@ -189,23 +191,41 @@ public class SingularitySwerveVisualizer extends Application {
         // Angle adjusting motors will set the wheels to be pointed to the angle of
         // these slopes:
         //double mFL_Angle = Math.atan((mFL_YPos_Next - mFL_YPos_Curr) / (mFL_XPos_Next - mFL_XPos_Curr));
-        double mFL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH);
-        double mFR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH);
-        double mBL_Angle = mFR_Angle + 180;
-        double mBR_Angle = mFL_Angle + 180;
+        double mFL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH, 180);
+        double mFR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH, 90);
+        double mBL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH, 270);
+        double mBR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH, 0);
 
         double mFR_Distance = distance(mFR_XPos_Curr, mFR_YPos_Curr, mFR_XPos_Next, mFR_YPos_Next);
         double mFL_Distance = distance(mFL_XPos_Curr, mFL_YPos_Curr, mFL_XPos_Next, mFL_YPos_Next);
         double mBL_Distance = distance(mBL_XPos_Curr, mBL_YPos_Curr, mBL_XPos_Next, mBL_YPos_Next);
         double mBR_Distance = distance(mBR_XPos_Curr, mBR_YPos_Curr, mBR_XPos_Next, mBR_YPos_Next);
         
+        /*Wheel[] wheels = new Wheel[4];
+        wheels[0] = new Wheel(WheelLocation.BackLeft, mBL_Angle, mBL_Distance);
+        wheels[1] = new Wheel(WheelLocation.FrontLeft, mFL_Angle, mFL_Distance);
+        wheels[2] = new Wheel(WheelLocation.FrontRight, mFR_Angle, mFR_Distance);
+        wheels[3] = new Wheel(WheelLocation.BackRight, mBR_Angle, mBR_Distance);*/
+
         Wheel[] wheels = new Wheel[4];
         wheels[0] = new Wheel(WheelLocation.BackLeft, mBL_Angle, mBL_Distance);
         wheels[1] = new Wheel(WheelLocation.FrontLeft, mFL_Angle, mFL_Distance);
         wheels[2] = new Wheel(WheelLocation.FrontRight, mFR_Angle, mFR_Distance);
-        wheels[3] = new Wheel(WheelLocation.BackRight, mBR_Angle, mBR_Distance);
+        wheels[3] = new Wheel(WheelLocation.BackRight, mBL_Angle, mBR_Distance);
+
+        /*System.out.println(mFR_Angle);
+        System.out.println(mFL_Angle);
+        System.out.println(mBR_Angle);
+        System.out.println(mBL_Angle);*/
+        //System.out.println();
+        /*System.out.println(mFR_Distance);
+        System.out.println(mFL_Distance);
+        System.out.println(mBR_Distance);
+        System.out.println(mBL_Distance);*/
 
         return wheels;
+
+
     }
 
 }
