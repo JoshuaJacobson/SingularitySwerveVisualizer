@@ -43,11 +43,34 @@ public class Robot {
             resultantVector = resultantVector.add(wheel.getPosition());
         }
         resultantVector = new Point(resultantVector.getX() / 4.0, resultantVector.getY() / 4.0);
+        if (Math.abs(resultantVector.getX()) < 0.001) resultantVector = new Point(0, resultantVector.getY());
+        if (Math.abs(resultantVector.getY()) < 0.001) resultantVector = new Point(resultantVector.getX(), 0);
 
         //Calculate the rotational moment 
         double rotation = 0;
         for (Wheel wheel: wheels) {
-            rotation += wheel.getPosition().rotation() - resultantVector.rotation();
+            if (resultantVector.getX() == 0 && resultantVector.getY() == 0) {
+                double local_rotation = 0;
+                switch (wheel.getLocation()) {
+                    case BackLeft:
+                        local_rotation = spinningDifferential(defaults[0], wheel);
+                        break;
+                    case FrontLeft:
+                        local_rotation = spinningDifferential(defaults[1], wheel);
+                        break;
+                    case FrontRight:
+                        local_rotation = spinningDifferential(defaults[2], wheel);
+                        break;
+                    case BackRight:
+                        local_rotation = spinningDifferential(defaults[3], wheel);
+                        break;
+                    default:
+                        break;
+                }
+                rotation += local_rotation;
+            } else {
+                rotation += wheel.getPosition().rotation() - resultantVector.rotation();
+            }
         }
         rotation /= 4.0;
 
@@ -62,9 +85,13 @@ public class Robot {
         //Calculate resultant rotation
         rotationMoment = rotation;
         if (Math.abs(rotationMoment) > MAX_ROTATION) {
-            double scalar = MAX_ROTATION / Math.abs(resultantVector.length());
+            double scalar = MAX_ROTATION / Math.abs(rotationMoment);
             rotationMoment *= scalar;
         }
+    }
+
+    private double spinningDifferential(Wheel defaultWheel, Wheel wheel) {
+        return Math.PI/2 - Math.abs(defaultWheel.getPosition().rotate(Math.PI/2).rotation() - wheel.getPosition().rotation());
     }
 
     public void move(double time) {
@@ -79,5 +106,9 @@ public class Robot {
             //System.out.println(wheel.rotate(rotation).add(location).getPosition().getX() + "  " + wheel.rotate(rotation).add(location).getPosition().getY());
         }
         return res;
+    }
+
+    public String toString() {
+        return "ROBOT X: " + location.getX() + " Y: " + location.getY() + " ROT: " + rotation;
     }
 }
