@@ -130,6 +130,8 @@ public class Robot {
             // + " " + wheel.rotate(rotation).add(location).getPosition().getY());
         }
         for (Wheel wheel : wheels) {
+            double scalar = 5.0 / wheel.getPosition().length();
+            wheel = new Wheel(wheel.getLocation(), new Point(wheel.getPosition().getX()*scalar,wheel.getPosition().getY()*scalar));
             try {
                 res = res.setWheel(res.getWheel(wheel.getLocation()).add(wheel.getPosition()));
             } catch (Exception e) {
