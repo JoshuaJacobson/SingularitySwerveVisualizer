@@ -17,7 +17,7 @@ public class Robot {
     private double rotation;
     private final Wheel[] defaults;
 
-    private static final double MAX_VELOCITY = 5;
+    private static final double MAX_VELOCITY = 50;
     private static final double MAX_ROTATION = Math.PI / 20;
 
     public Robot(double width, double length) {
@@ -42,11 +42,15 @@ public class Robot {
         return length;
     }
 
+    public double getRotate() {
+        return rotation;
+    }
+
     public ULine[] applyWheels(Wheel[] wheels) {
         // Calculate Acceleration for all wheels
         Point resultantVector = new Point(0, 0);
         for (Wheel wheel : wheels) {
-            if(wheel.getPosition().length() <= 0.001){
+            if(wheel.getPosition().length() >= 0.001){
                 resultantVector = resultantVector.add(wheel.getPosition());
             } 
         }
@@ -55,15 +59,15 @@ public class Robot {
             resultantVector = new Point(0, resultantVector.getY());
         if (Math.abs(resultantVector.getY()) < 0.001)
             resultantVector = new Point(resultantVector.getX(), 0);
+        if (resultantVector.getX() == 0 && resultantVector.getY() == 0) {
+            resultantVector = new Point(-velocityVector.getX() * .1, -velocityVector.getY() * .1);
+        }
 
         // Calculate the rotational moment
         double rotation = 0;
         for (Wheel wheel : wheels) {
 
-            if(wheel.getPosition().length() <= 0.001){
-
-            }
-            else if (resultantVector.getX() == 0 && resultantVector.getY() == 0) {
+            if (resultantVector.getX() == 0 && resultantVector.getY() == 0) {
                 double local_rotation = 0;
                 switch (wheel.getLocation()) {
                     case BackLeft:

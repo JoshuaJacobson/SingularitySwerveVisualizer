@@ -36,7 +36,7 @@ public class GuiControls {
         labelRotate = new Label("Rotation: ");
         submit.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
-                SingularitySwerveVisualizer.customCodeHere();
+                //SingularitySwerveVisualizer.customCodeHere();
             }
         });
     }
