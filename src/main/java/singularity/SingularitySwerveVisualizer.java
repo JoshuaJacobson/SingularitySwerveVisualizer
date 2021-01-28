@@ -126,6 +126,17 @@ public class SingularitySwerveVisualizer extends Application {
             return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr)));
         }
     }
+    
+
+    private static double getDistanceIfStill(double xNext, double yNext, double xCurr, double yCurr, double rotationSpeed ){
+        if(xNext == xCurr && yNext == yCurr){
+                return rotationSpeed;
+        }
+        else{
+                return distance(xNext, yNext, xCurr, yCurr);
+        }
+        
+    }
 
     
     public static Wheel[] customCodeHere(Robot robot) {
@@ -192,16 +203,16 @@ public class SingularitySwerveVisualizer extends Application {
         // Angle adjusting motors will set the wheels to be pointed to the angle of
         // these slopes:
         //double mFL_Angle = Math.atan((mFL_YPos_Next - mFL_YPos_Curr) / (mFL_XPos_Next - mFL_XPos_Curr));
-        double mFL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH, 180 + Math.toDegrees(rotate));
-        double mFR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH, 90 + Math.toDegrees(rotate));
-        double mBL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH, 270 + Math.toDegrees(rotate));
-        double mBR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH, 0 + Math.toDegrees(rotate));
+        double mFL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH, 180 - Math.toDegrees(rotation));
+        double mFR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH, 90 - Math.toDegrees(rotation));
+        double mBL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH, 270 - Math.toDegrees(rotation));
+        double mBR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH, 0 - Math.toDegrees(rotation));
 
-        double mFR_Distance = distance(mFR_XPos_Curr, mFR_YPos_Curr, mFR_XPos_Next, mFR_YPos_Next);
-        double mFL_Distance = distance(mFL_XPos_Curr, mFL_YPos_Curr, mFL_XPos_Next, mFL_YPos_Next);
-        double mBL_Distance = distance(mBL_XPos_Curr, mBL_YPos_Curr, mBL_XPos_Next, mBL_YPos_Next);
-        double mBR_Distance = distance(mBR_XPos_Curr, mBR_YPos_Curr, mBR_XPos_Next, mBR_YPos_Next);
-        
+        double mFR_Distance = getDistanceIfStill(mFR_XPos_Curr, mFR_YPos_Curr, mFR_XPos_Next, mFR_YPos_Next, 1);
+        double mFL_Distance = getDistanceIfStill(mFL_XPos_Curr, mFL_YPos_Curr, mFL_XPos_Next, mFL_YPos_Next, 1);
+        double mBL_Distance = getDistanceIfStill(mBL_XPos_Curr, mBL_YPos_Curr, mBL_XPos_Next, mBL_YPos_Next, 1);
+        double mBR_Distance = getDistanceIfStill(mBR_XPos_Curr, mBR_YPos_Curr, mBR_XPos_Next, mBR_YPos_Next, 1);
+
         /*Wheel[] wheels = new Wheel[4];
         wheels[0] = new Wheel(WheelLocation.BackLeft, mBL_Angle, mBL_Distance);
         wheels[1] = new Wheel(WheelLocation.FrontLeft, mFL_Angle, mFL_Distance);
