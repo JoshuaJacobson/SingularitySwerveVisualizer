@@ -211,7 +211,7 @@ public class SingularitySwerveVisualizer extends Application {
         double mFL_Distance = getDistanceIfStill(mFL_XPos_Curr, mFL_YPos_Curr, mFL_XPos_Next, mFL_YPos_Next, 1);
         double mBL_Distance = getDistanceIfStill(mBL_XPos_Curr, mBL_YPos_Curr, mBL_XPos_Next, mBL_YPos_Next, 1);
         double mBR_Distance = getDistanceIfStill(mBR_XPos_Curr, mBR_YPos_Curr, mBR_XPos_Next, mBR_YPos_Next, 1);
-        
+
         /*Wheel[] wheels = new Wheel[4];
         wheels[0] = new Wheel(WheelLocation.BackLeft, mBL_Angle, mBL_Distance);
         wheels[1] = new Wheel(WheelLocation.FrontLeft, mFL_Angle, mFL_Distance);
