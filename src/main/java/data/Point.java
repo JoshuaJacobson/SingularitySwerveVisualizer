@@ -22,7 +22,7 @@ public class Point {
         if (getX() > 0 && getY() < 0) {
             r += 2*Math.PI;
         }
-        return r;
+        return ((r+Math.PI) % (2*Math.PI)) - Math.PI;
     }
     public double length() {
         return Math.sqrt(Math.pow(getX(), 2) + Math.pow(getY(), 2));

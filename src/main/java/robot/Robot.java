@@ -66,29 +66,24 @@ public class Robot {
         // Calculate the rotational moment
         double rotation = 0;
         for (Wheel wheel : wheels) {
-
-            if (resultantVector.getX() == 0 && resultantVector.getY() == 0) {
-                double local_rotation = 0;
-                switch (wheel.getLocation()) {
-                    case BackLeft:
-                        local_rotation = spinningDifferential(defaults[0], wheel);
-                        break;
-                    case FrontLeft:
-                        local_rotation = spinningDifferential(defaults[1], wheel);
-                        break;
-                    case FrontRight:
-                        local_rotation = spinningDifferential(defaults[2], wheel);
-                        break;
-                    case BackRight:
-                        local_rotation = spinningDifferential(defaults[3], wheel);
-                        break;
-                    default:
-                        break;
-                }
-                rotation += local_rotation;
-            } else {
-                rotation += wheel.getPosition().rotation() - resultantVector.rotation();
+            double local_rotation = 0;
+            switch (wheel.getLocation()) {
+                case BackLeft:
+                    local_rotation = spinningDifferential(defaults[0], wheel);
+                    break;
+                case FrontLeft:
+                    local_rotation = spinningDifferential(defaults[1], wheel);
+                    break;
+                case FrontRight:
+                    local_rotation = spinningDifferential(defaults[2], wheel);
+                    break;
+                case BackRight:
+                    local_rotation = spinningDifferential(defaults[3], wheel);
+                    break;
+                default:
+                    break;
             }
+            rotation += local_rotation;
         }
         rotation /= 4.0;
         
@@ -112,9 +107,9 @@ public class Robot {
         return renderWheels(wheels);
     }
 
-    private double spinningDifferential(Wheel defaultWheel, Wheel wheel) {
+    public double spinningDifferential(Wheel defaultWheel, Wheel wheel) {
         return Math.PI / 2
-                - Math.abs(defaultWheel.getPosition().rotate(Math.PI / 2).rotation() - wheel.getPosition().rotation());
+                - Math.abs(defaultWheel.getPosition().rotate(Math.PI / 2).rotation() - (wheel.getPosition().rotation()));
     }
 
     public void move(double time) {
