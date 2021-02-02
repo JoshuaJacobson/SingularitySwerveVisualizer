@@ -123,7 +123,23 @@ public class SingularitySwerveVisualizer extends Application {
             return Math.toDegrees(Math.atan(width / height)) + angleAdd;
         }
         else{ //if the robot isn't stationary
-            return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr)));
+            if(xNext < 0){
+                return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr))) + 180;
+            }
+            else if(xNext > 0){
+                return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr)));
+            }
+            else{ //xNext == 0
+                if(yNext < 0){
+                        return 270;
+                }
+                else{
+                        return 90;
+                }
+                
+            }
+            //return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr)));
+                
         }
     }
     
@@ -203,10 +219,10 @@ public class SingularitySwerveVisualizer extends Application {
         // Angle adjusting motors will set the wheels to be pointed to the angle of
         // these slopes:
         //double mFL_Angle = Math.atan((mFL_YPos_Next - mFL_YPos_Curr) / (mFL_XPos_Next - mFL_XPos_Curr));
-        double mFL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH, 180 - Math.toDegrees(rotation));
-        double mFR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH, 90 - Math.toDegrees(rotation));
-        double mBL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH, 270 - Math.toDegrees(rotation));
-        double mBR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH, 0 - Math.toDegrees(rotation));
+        double mFL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH, 180 + Math.toDegrees(rotate));
+        double mFR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH, 90 + Math.toDegrees(rotate));
+        double mBL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH, 270 + Math.toDegrees(rotate));
+        double mBR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH, 0 + Math.toDegrees(rotate));
 
         double mFR_Distance = getDistanceIfStill(mFR_XPos_Curr, mFR_YPos_Curr, mFR_XPos_Next, mFR_YPos_Next, 1);
         double mFL_Distance = getDistanceIfStill(mFL_XPos_Curr, mFL_YPos_Curr, mFL_XPos_Next, mFL_YPos_Next, 1);
@@ -235,10 +251,10 @@ public class SingularitySwerveVisualizer extends Application {
         //System.out.printf("(%6.2f)%n" , mBL_Distance);
         //System.out.printf("(%6.2f)%n" , mBR_Distance);
 
-        /*System.out.println(mFR_Angle);
+        System.out.println(mFR_Angle);
         System.out.println(mFL_Angle);
         System.out.println(mBR_Angle);
-        System.out.println(mBL_Angle);*/
+        System.out.println(mBL_Angle);
         //System.out.println();
         /*System.out.println(mFR_Distance);
         System.out.println(mFL_Distance);
