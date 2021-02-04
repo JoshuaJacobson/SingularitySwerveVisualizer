@@ -30,4 +30,7 @@ public class ULine {
     public Color getColor() {
         return this.color;
     }
+    public String toString() {
+        return String.format("ULINE START: (%6.2f, %6.2f) END: (%6.2f, %6.2f)", getSource().getX(), getSource().getY(), getDest().getX(), getDest().getY());
+    }
 }

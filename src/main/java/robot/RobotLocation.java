@@ -94,13 +94,13 @@ public class RobotLocation {
         }
         return wheels;
     }
-    Wheel getWheel(WheelLocation location) throws Exception {
+    Wheel getWheel(WheelLocation location) {
         for (Wheel w: wheels) {
             if (w.isLocation(location)) {
                 return w;
             }
         }
-        throw new Exception("Wheel not found");
+        return null;
     }
     Wheel[] getWheels() {
         return wheels;

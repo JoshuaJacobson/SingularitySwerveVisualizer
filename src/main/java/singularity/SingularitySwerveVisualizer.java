@@ -162,7 +162,7 @@ public class SingularitySwerveVisualizer extends Application {
         double horizontal = currentX;
         double vertical = currentY;
         double rotation = currentRotate;
-        double rotate = (robot.getRotate()-Math.PI) % (Math.PI * 2) - Math.PI;
+        double rotate = (robot.getRotate());
         //System.out.println(currentX);
         //double horizontal = 10;
         //double vertical = -10;
@@ -236,10 +236,10 @@ public class SingularitySwerveVisualizer extends Application {
         wheels[3] = new Wheel(WheelLocation.BackRight, mBR_Angle, mBR_Distance);*/
 
         Wheel[] wheels = new Wheel[4];
-        wheels[0] = new Wheel(WheelLocation.BackLeft,Math.toRadians(mBL_Angle), mBL_Distance);
-        wheels[1] = new Wheel(WheelLocation.FrontLeft, Math.toRadians(mFL_Angle), mFL_Distance);
-        wheels[2] = new Wheel(WheelLocation.FrontRight, Math.toRadians(mFR_Angle), mFR_Distance);
-        wheels[3] = new Wheel(WheelLocation.BackRight, Math.toRadians(mBR_Angle), mBR_Distance);
+        wheels[0] = new Wheel(WheelLocation.BackLeft,Math.toRadians(mBL_Angle) - rotate, mBL_Distance);
+        wheels[1] = new Wheel(WheelLocation.FrontLeft, Math.toRadians(mFL_Angle) - rotate, mFL_Distance);
+        wheels[2] = new Wheel(WheelLocation.FrontRight, Math.toRadians(mFR_Angle) - rotate, mFR_Distance);
+        wheels[3] = new Wheel(WheelLocation.BackRight, Math.toRadians(mBR_Angle) - rotate, mBR_Distance);
 
         //System.out.printf("(%6.2f)%n" , mFL_Angle);
         //System.out.printf("(%6.2f)%n" , mFR_Angle);
