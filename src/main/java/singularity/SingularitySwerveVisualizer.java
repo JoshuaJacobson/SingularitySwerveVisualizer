@@ -118,16 +118,16 @@ public class SingularitySwerveVisualizer extends Application {
         return (Math.sqrt((Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2))));
     }
 
-    private static double getAngleIfStill(double xNext, double yNext, double xCurr, double yCurr, double height, double width, double angleAdd){
+    private static double getAngleIfStill(double xNext, double yNext, double xCurr, double yCurr, double height, double width, double angleAdd, double localToGlobal){
         if(xNext == xCurr && yNext == yCurr){ //check to see if robot is stationary
             return Math.toDegrees(Math.atan(width / height)) + angleAdd;
         }
         else{ //if the robot isn't stationary
             if(xNext < 0){
-                return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr))) + 180;
+                return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr)) - localToGlobal) + 180;
             }
             else if(xNext > 0){
-                return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr)));
+                return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr))  - localToGlobal);
             }
             else{ //xNext == 0
                 if(yNext < 0){
@@ -161,7 +161,8 @@ public class SingularitySwerveVisualizer extends Application {
 
         double horizontal = currentX;
         double vertical = currentY;
-        double rotation = currentRotate;
+        //double rotation = currentRotate;
+        double rotation = 0;
         double rotate = (robot.getRotate());
         //System.out.println(currentX);
         //double horizontal = 10;
@@ -219,15 +220,26 @@ public class SingularitySwerveVisualizer extends Application {
         // Angle adjusting motors will set the wheels to be pointed to the angle of
         // these slopes:
         //double mFL_Angle = Math.atan((mFL_YPos_Next - mFL_YPos_Curr) / (mFL_XPos_Next - mFL_XPos_Curr));
-        double mFL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH, 180 + Math.toDegrees(rotate));
-        double mFR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH, 90 + Math.toDegrees(rotate));
-        double mBL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH, 270 + Math.toDegrees(rotate));
-        double mBR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH, 0 + Math.toDegrees(rotate));
 
-        double mFR_Distance = getDistanceIfStill(mFR_XPos_Curr, mFR_YPos_Curr, mFR_XPos_Next, mFR_YPos_Next, 1);
-        double mFL_Distance = getDistanceIfStill(mFL_XPos_Curr, mFL_YPos_Curr, mFL_XPos_Next, mFL_YPos_Next, 1);
-        double mBL_Distance = getDistanceIfStill(mBL_XPos_Curr, mBL_YPos_Curr, mBL_XPos_Next, mBL_YPos_Next, 1);
-        double mBR_Distance = getDistanceIfStill(mBR_XPos_Curr, mBR_YPos_Curr, mBR_XPos_Next, mBR_YPos_Next, 1);
+        //double mFL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH, 180, rotate);
+        //double mFR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH, 90, rotate);
+        //double mBL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH, 270, rotate);
+        //double mBR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH, 0, rotate);
+
+        double mFL_Angle = 90;
+        double mFR_Angle = 90;
+        double mBL_Angle = 90;
+        double mBR_Angle = 90;
+
+        //double mFR_Distance = getDistanceIfStill(mFR_XPos_Curr, mFR_YPos_Curr, mFR_XPos_Next, mFR_YPos_Next, 1);
+        //double mFL_Distance = getDistanceIfStill(mFL_XPos_Curr, mFL_YPos_Curr, mFL_XPos_Next, mFL_YPos_Next, 1);
+        //double mBL_Distance = getDistanceIfStill(mBL_XPos_Curr, mBL_YPos_Curr, mBL_XPos_Next, mBL_YPos_Next, 1);
+        //double mBR_Distance = getDistanceIfStill(mBR_XPos_Curr, mBR_YPos_Curr, mBR_XPos_Next, mBR_YPos_Next, 1);
+
+        double mFR_Distance = 1;
+        double mFL_Distance = 1;
+        double mBL_Distance = 1;
+        double mBR_Distance = 1;
 
         /*Wheel[] wheels = new Wheel[4];
         wheels[0] = new Wheel(WheelLocation.BackLeft, mBL_Angle, mBL_Distance);
@@ -236,10 +248,10 @@ public class SingularitySwerveVisualizer extends Application {
         wheels[3] = new Wheel(WheelLocation.BackRight, mBR_Angle, mBR_Distance);*/
 
         Wheel[] wheels = new Wheel[4];
-        wheels[0] = new Wheel(WheelLocation.BackLeft,Math.toRadians(mBL_Angle) - rotate, mBL_Distance);
-        wheels[1] = new Wheel(WheelLocation.FrontLeft, Math.toRadians(mFL_Angle) - rotate, mFL_Distance);
-        wheels[2] = new Wheel(WheelLocation.FrontRight, Math.toRadians(mFR_Angle) - rotate, mFR_Distance);
-        wheels[3] = new Wheel(WheelLocation.BackRight, Math.toRadians(mBR_Angle) - rotate, mBR_Distance);
+        wheels[0] = new Wheel(WheelLocation.BackLeft,Math.toRadians(mBL_Angle), mBL_Distance);
+        wheels[1] = new Wheel(WheelLocation.FrontLeft, Math.toRadians(mFL_Angle), mFL_Distance);
+        wheels[2] = new Wheel(WheelLocation.FrontRight, Math.toRadians(mFR_Angle), mFR_Distance);
+        wheels[3] = new Wheel(WheelLocation.BackRight, Math.toRadians(mBR_Angle), mBR_Distance);
 
         //System.out.printf("(%6.2f)%n" , mFL_Angle);
         //System.out.printf("(%6.2f)%n" , mFR_Angle);

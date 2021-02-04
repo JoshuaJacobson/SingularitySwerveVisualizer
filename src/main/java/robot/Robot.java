@@ -19,9 +19,9 @@ public class Robot {
     private final RobotLocation defaults;
 
     private static final double MAX_VELOCITY = 50;
-    private static final double MAX_ROTATION = Math.PI / 2;
+    private static final double MAX_ROTATION = Math.PI / 20;
     private static final double VELOCITY_DECEL = 25;
-    private static final double ROTATION_DECEL = Math.PI / 4;
+    private static final double ROTATION_DECEL = Math.PI / 40;
 
     public Robot(double width, double length) {
         this.width = width;
