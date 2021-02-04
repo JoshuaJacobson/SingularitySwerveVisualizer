@@ -31,7 +31,7 @@ public class RobotTest {
         
         assertEquals(rectangle.spinningDifferential(
             new Wheel(WheelLocation.FrontRight, new Point(width / 2.0, length / 2.0)),
-            new Wheel(WheelLocation.FrontRight, new Point(-length*2,width))
+            new Wheel(WheelLocation.FrontRight, new Point(-length*2,width*2))
         ), Math.PI/2, 0.001);
     }
     @Test

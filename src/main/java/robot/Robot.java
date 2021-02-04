@@ -108,8 +108,11 @@ public class Robot {
     }
 
     public double spinningDifferential(Wheel defaultWheel, Wheel wheel) {
-        return Math.PI / 2
-                - Math.abs(defaultWheel.getPosition().rotate(Math.PI / 2).rotation() - (wheel.getPosition().rotation()));
+        double defaultRot = defaultWheel.getPosition().rotate(Math.PI / 2).rotation();
+        double res = Math.PI / 2
+            - Math.abs(defaultRot - (wheel.getPosition().rotation()));
+        System.out.printf("DEFAULT: {%4.1f}, WHEEL: {%4.1f} RES: {%4.1f}%n", defaultRot, Math.toDegrees(wheel.getPosition().rotation()), Math.toDegrees(res));
+        return res;
     }
 
     public void move(double time) {

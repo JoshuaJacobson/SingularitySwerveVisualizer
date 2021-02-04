@@ -16,13 +16,16 @@ public class Point {
     public static Point Unitialized = new Point(0,0);
     public double rotation() {
         double r = Math.atan(getY()/getX());
+        if (getX() == 0) {
+            r = (getY()>0) ? Math.PI/2 : -Math.PI/2;
+        }
         if (getX() < 0) {
             r += Math.PI;
         }
         if (getX() > 0 && getY() < 0) {
             r += 2*Math.PI;
         }
-        return ((r+Math.PI) % (2*Math.PI)) - Math.PI;
+        return r;
     }
     public double length() {
         return Math.sqrt(Math.pow(getX(), 2) + Math.pow(getY(), 2));
