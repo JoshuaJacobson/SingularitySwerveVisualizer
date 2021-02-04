@@ -163,7 +163,7 @@ public class SingularitySwerveVisualizer extends Application {
         double vertical = currentY;
         double rotation = currentRotate;
         double rotate = (robot.getRotate()-Math.PI) % (Math.PI * 2) - Math.PI;
-        System.out.println(currentX);
+        //System.out.println(currentX);
         //double horizontal = 10;
         //double vertical = -10;
 
@@ -250,16 +250,6 @@ public class SingularitySwerveVisualizer extends Application {
         //System.out.printf("(%6.2f)%n" , mFR_Distance);
         //System.out.printf("(%6.2f)%n" , mBL_Distance);
         //System.out.printf("(%6.2f)%n" , mBR_Distance);
-
-        System.out.println(mFR_Angle);
-        System.out.println(mFL_Angle);
-        System.out.println(mBR_Angle);
-        System.out.println(mBL_Angle);
-        //System.out.println();
-        /*System.out.println(mFR_Distance);
-        System.out.println(mFL_Distance);
-        System.out.println(mBR_Distance);
-        System.out.println(mBL_Distance);*/
 
         return wheels;
 

@@ -1,8 +1,5 @@
 package robot;
 
-import java.io.PrintStream;
-import java.util.Formatter;
-
 import data.Point;
 import data.ULine;
 import data.Wheel;
@@ -18,7 +15,7 @@ public class Robot {
     private final Wheel[] defaults;
 
     private static final double MAX_VELOCITY = 50;
-    private static final double MAX_ROTATION = Math.PI / 20;
+    private static final double MAX_ROTATION = Math.PI / 2;
 
     public Robot(double width, double length) {
         this.width = width;
@@ -65,27 +62,23 @@ public class Robot {
 
         // Calculate the rotational moment
         double rotation = 0;
-        for (Wheel wheel : wheels) {
-            double local_rotation = 0;
-            switch (wheel.getLocation()) {
-                case BackLeft:
-                    local_rotation = spinningDifferential(defaults[0], wheel);
-                    break;
-                case FrontLeft:
-                    local_rotation = spinningDifferential(defaults[1], wheel);
-                    break;
-                case FrontRight:
-                    local_rotation = spinningDifferential(defaults[2], wheel);
-                    break;
-                case BackRight:
-                    local_rotation = spinningDifferential(defaults[3], wheel);
-                    break;
-                default:
-                    break;
-            }
-            rotation += local_rotation;
+        RobotLocation orig = getOrig();
+        RobotLocation res = getTarget(wheels);
+        try {
+            rotation += spinningDifferential(orig.getWheel(WheelLocation.BackLeft), res.getWheel(WheelLocation.BackLeft));
+            rotation += spinningDifferential(orig.getWheel(WheelLocation.BackRight), res.getWheel(WheelLocation.BackRight));
+            rotation += spinningDifferential(orig.getWheel(WheelLocation.FrontLeft), res.getWheel(WheelLocation.FrontLeft));
+            rotation += spinningDifferential(orig.getWheel(WheelLocation.FrontRight), res.getWheel(WheelLocation.FrontRight));
+        } catch (Exception e) {
+            rotation = 0;
         }
-        rotation /= 4.0;
+        rotation %= 2*Math.PI;
+        System.out.printf("ORIGINAL ROTATION: %6.2f%n", rotation);
+        //rotation /= 4.0;
+
+        if (Math.abs(rotation) <= .001 || Math.abs(rotation) > Math.PI*2 - 0.001) {
+            rotation = -rotationMoment*.1;
+        }
         
 
         // Calculate our new velocity
@@ -98,7 +91,7 @@ public class Robot {
         velocityVector = resultantVector;
 
         // Calculate resultant rotation
-        rotationMoment = rotation;
+        rotationMoment += rotation;
         if (Math.abs(rotationMoment) > MAX_ROTATION) {
             double scalar = MAX_ROTATION / Math.abs(rotationMoment);
             rotationMoment *= scalar;
@@ -108,17 +101,16 @@ public class Robot {
     }
 
     public double spinningDifferential(Wheel defaultWheel, Wheel wheel) {
-        double defaultRot = defaultWheel.getPosition().rotate(Math.PI / 2).rotation();
-        double res = Math.PI / 2
-            - Math.abs(defaultRot - (wheel.getPosition().rotation()));
-        System.out.printf("DEFAULT: {%4.1f}, WHEEL: {%4.1f} RES: {%4.1f}%n", defaultRot, Math.toDegrees(wheel.getPosition().rotation()), Math.toDegrees(res));
+        double defaultRot = defaultWheel.getPosition().rotation();
+        double res = Math.PI * Math.sin(defaultRot - wheel.getPosition().rotation());
+        System.out.printf("%s ROTATION %6.2f%n", wheel.getLocation(), res);
         return res;
     }
 
     public void move(double time) {
         location = new Point(location.getX() + (velocityVector.getX() * time),
                 location.getY() + (velocityVector.getY() * time));
-        rotation += rotationMoment;
+        rotation += (rotationMoment * time);
     }
 
     public RobotLocation render() {
@@ -131,13 +123,16 @@ public class Robot {
         return res;
     }
 
-    public ULine[] renderWheels(Wheel[] wheels) {
+    public RobotLocation getOrig() {
         RobotLocation res = new RobotLocation(this);
         for (Wheel wheel : defaults) {
-            res = res.setWheel(wheel.rotate(rotation).add(location));
-            // System.out.println(wheel.rotate(rotation).add(location).getPosition().getX()
-            // + " " + wheel.rotate(rotation).add(location).getPosition().getY());
+            res = res.setWheel(wheel.rotate(rotation));
         }
+        return res;
+    }
+
+    public RobotLocation getTarget(Wheel[] wheels) {
+        RobotLocation res = getOrig();
         for (Wheel wheel : wheels) {
             double scalar = 5.0 / wheel.getPosition().length();
             wheel = new Wheel(wheel.getLocation(), new Point(wheel.getPosition().getX()*scalar,wheel.getPosition().getY()*scalar));
@@ -147,7 +142,20 @@ public class Robot {
                 e.printStackTrace();
             }
         }
-        return this.render().renderPaths(res);
+        return res;
+    }
+
+    public ULine[] renderWheels(Wheel[] wheels) {
+        RobotLocation centered = getTarget(wheels);
+        try {
+            centered.setWheel(centered.getWheel(WheelLocation.FrontRight).add(location));
+            centered.setWheel(centered.getWheel(WheelLocation.FrontLeft).add(location));
+            centered.setWheel(centered.getWheel(WheelLocation.BackLeft).add(location));
+            centered.setWheel(centered.getWheel(WheelLocation.BackRight).add(location));
+        } catch (Exception e) {
+            return null;
+        }
+        return this.render().renderPaths(centered);
     }
 
     public String toString() {
