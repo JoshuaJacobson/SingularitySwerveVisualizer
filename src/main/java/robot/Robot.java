@@ -57,7 +57,6 @@ public class Robot {
         rotationalAcceleration = 0;
         for (Wheel wheel : wheels) {
             accelerationVector = accelerationVector.add(wheel.getPosition());
-            System.out.println(rotationalAcceleration);
             rotationalAcceleration += (Math.PI/2) * Math.sin(wheel.getPosition().rotation() - defaults.getWheel(wheel.getLocation()).getPosition().rotation());
         }
         rotationalAcceleration *= accelerationVector.length();
@@ -70,7 +69,7 @@ public class Robot {
             double scalar = VELOCITY_DECEL * time;
             velocityVector = new Point(velocityVector.getX() * scalar, velocityVector.getY() * scalar);
         } else {
-            accelerationVector = new Point(accelerationVector.getX() * time, accelerationVector.getY() * time);
+            accelerationVector = new Point(accelerationVector.getX() * time * 10, accelerationVector.getY() * time * 10);
             accelerationVector = accelerationVector.rotate(rotation);
             velocityVector = velocityVector.add(accelerationVector);
             if (velocityVector.length() > MAX_VELOCITY) {
