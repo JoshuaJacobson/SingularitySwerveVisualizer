@@ -57,9 +57,10 @@ public class Robot {
         rotationalAcceleration = 0;
         for (Wheel wheel : wheels) {
             accelerationVector = accelerationVector.add(wheel.getPosition());
-            rotationalAcceleration += Math.PI * Math.sin(wheel.getPosition().rotation() - defaults.getWheel(wheel.getLocation()).getPosition().rotation());
-            rotationalAcceleration *= accelerationVector.length();
+            System.out.println(rotationalAcceleration);
+            rotationalAcceleration += (Math.PI/2) * Math.sin(wheel.getPosition().rotation() - defaults.getWheel(wheel.getLocation()).getPosition().rotation());
         }
+        rotationalAcceleration *= accelerationVector.length();
         return renderWheels(wheels);
     }
 
@@ -78,7 +79,7 @@ public class Robot {
             }
         }
 
-        if (Math.abs(rotationalAcceleration) < 0.001) {
+        if (Math.abs(rotationalAcceleration) < 0.01) {
             //Decelerate
             double scalar = ROTATION_DECEL * time;
             rotationalVelocity *= scalar;
