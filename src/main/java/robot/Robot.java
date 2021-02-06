@@ -19,9 +19,9 @@ public class Robot {
     private final RobotLocation defaults;
 
     private static final double MAX_VELOCITY = 50;
-    private static final double MAX_ROTATION = Math.PI / 20;
+    private static final double MAX_ROTATION = Math.PI / 2;
     private static final double VELOCITY_DECEL = 25;
-    private static final double ROTATION_DECEL = Math.PI / 40;
+    private static final double ROTATION_DECEL = Math.PI / 4;
 
     public Robot(double width, double length) {
         this.width = width;
@@ -78,7 +78,7 @@ public class Robot {
             }
         }
 
-        if (Math.abs(rotationalAcceleration) < 0.01) {
+        if (Math.abs(rotationalAcceleration) < 0.001) {
             //Decelerate
             double scalar = ROTATION_DECEL * time;
             rotationalVelocity *= scalar;
@@ -86,7 +86,7 @@ public class Robot {
             rotationalAcceleration *= time;
             rotationalVelocity += rotationalAcceleration;
             if (Math.abs(rotationalVelocity) > MAX_ROTATION) {
-                double scalar = MAX_ROTATION / rotationalVelocity;
+                double scalar = Math.abs(MAX_ROTATION / rotationalVelocity);
                 rotationalVelocity *= scalar;
             }
         }
