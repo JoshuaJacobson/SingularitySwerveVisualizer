@@ -118,8 +118,8 @@ public class SingularitySwerveVisualizer extends Application {
         return (Math.sqrt((Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2))));
     }
 
-    private static double getAngleIfStill(double xNext, double yNext, double xCurr, double yCurr, double height, double width, double angleAdd, double localToGlobal){
-        if(xNext == xCurr && yNext == yCurr){ //check to see if robot is stationary
+    private static double getAngleIfStill(double horizontal, double vertical, double xNext, double yNext, double xCurr, double yCurr, double height, double width, double angleAdd, double localToGlobal){
+        if(horizontal <= .001 && vertical <= .001){ //check to see if robot is stationary
                 //System.out.println(Math.toDegrees(Math.atan(width / height)) + angleAdd);
             return Math.toDegrees(Math.atan(width / height)) + angleAdd;
         }
@@ -145,8 +145,8 @@ public class SingularitySwerveVisualizer extends Application {
     }
     
 
-    private static double getDistanceIfStill(double xNext, double yNext, double xCurr, double yCurr, double rotationSpeed ){
-        if(xNext == xCurr && yNext == yCurr){
+    private static double getDistanceIfStill(double horizontal, double vertical, double xNext, double yNext, double xCurr, double yCurr, double rotationSpeed ){
+        if(horizontal <= .001 && vertical <= .001){ //if they're basically zero
                 return rotationSpeed;
         }
         else{
@@ -171,7 +171,7 @@ public class SingularitySwerveVisualizer extends Application {
 
 
         double halfRobotWidth = ROBOT_WIDTH / 2;
-        double halfRobotHeight = ROBOT_WIDTH / 2;
+        double halfRobotHeight = ROBOT_LENGTH / 2;
 
         double midToOutSize = distance(halfRobotWidth, halfRobotHeight, 0, 0); // distance between robot center and any
                                                                                // of the wheels
@@ -235,22 +235,22 @@ public class SingularitySwerveVisualizer extends Application {
 
         // Angle adjusting motors will set the wheels to be pointed to the angle of
         // these slopes:
-        //double mFL_Angle = Math.atan((mFL_YPos_Next - mFL_YPos_Curr) / (mFL_XPos_Next - mFL_XPos_Curr));
+        //double mFL_Angle = Math.atan((mFL_YPos_Next - mFL_YPos_Curr) / (mFL_XPos_Next - mFL_XPos_Curr)); ROBOT_WIDTH
 
-        double mFL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH, 180, rotate);
-        double mFR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH, 90, rotate);
-        double mBL_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_LENGTH, ROBOT_WIDTH, 270, rotate);
-        double mBR_Angle = getAngleIfStill(horizontal, vertical, 0, 0, ROBOT_WIDTH, ROBOT_LENGTH, 0, rotate);
+        double mFR_Angle = getAngleIfStill(horizontal, vertical, mFR_XPos_Next, mFR_YPos_Next, -mFR_XPos_Curr, -mFR_XPos_Curr, ROBOT_LENGTH, ROBOT_WIDTH, 90, rotate);
+        double mFL_Angle = getAngleIfStill(horizontal, vertical, mFL_XPos_Next, mFL_YPos_Next, mFL_XPos_Curr, mFL_XPos_Curr, ROBOT_WIDTH, ROBOT_LENGTH, 180, rotate);
+        double mBL_Angle = getAngleIfStill(horizontal, vertical, mBL_XPos_Next, mBL_YPos_Next, -mBL_XPos_Curr, -mBL_XPos_Curr, ROBOT_LENGTH, ROBOT_WIDTH, 270, rotate);
+        double mBR_Angle = getAngleIfStill(horizontal, vertical, mBR_XPos_Next, mBR_YPos_Next, mBR_XPos_Curr, mBR_XPos_Curr, ROBOT_WIDTH, ROBOT_LENGTH, 0, rotate);
 
         //double mFL_Angle = 90;
         //double mFR_Angle = 90;
         //double mBL_Angle = 90;
         //double mBR_Angle = 90;
 
-        double mFR_Distance = getDistanceIfStill(mFR_XPos_Curr, mFR_YPos_Curr, mFR_XPos_Next, mFR_YPos_Next, 1);
-        double mFL_Distance = getDistanceIfStill(mFL_XPos_Curr, mFL_YPos_Curr, mFL_XPos_Next, mFL_YPos_Next, 1);
-        double mBL_Distance = getDistanceIfStill(mBL_XPos_Curr, mBL_YPos_Curr, mBL_XPos_Next, mBL_YPos_Next, 1);
-        double mBR_Distance = getDistanceIfStill(mBR_XPos_Curr, mBR_YPos_Curr, mBR_XPos_Next, mBR_YPos_Next, 1);
+        double mFR_Distance = getDistanceIfStill(horizontal, vertical,  mFR_XPos_Next, mFR_YPos_Next, mFR_XPos_Curr, mFR_YPos_Curr, rotation);
+        double mFL_Distance = getDistanceIfStill(horizontal, vertical,  mFL_XPos_Next, mFL_YPos_Next, mFL_XPos_Curr, mFL_YPos_Curr, rotation);
+        double mBL_Distance = getDistanceIfStill(horizontal, vertical,  mBL_XPos_Next, mBL_YPos_Next, mBL_XPos_Curr, mBL_YPos_Curr, rotation);
+        double mBR_Distance = getDistanceIfStill(horizontal, vertical,  mBR_XPos_Next, mBR_YPos_Next, mBR_XPos_Curr, mBR_YPos_Curr, rotation);
 
         //double mFR_Distance = 1;
         //double mFL_Distance = 1;
