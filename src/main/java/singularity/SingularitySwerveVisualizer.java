@@ -120,6 +120,7 @@ public class SingularitySwerveVisualizer extends Application {
 
     private static double getAngleIfStill(double xNext, double yNext, double xCurr, double yCurr, double height, double width, double angleAdd, double localToGlobal){
         if(xNext == xCurr && yNext == yCurr){ //check to see if robot is stationary
+                //System.out.println(Math.toDegrees(Math.atan(width / height)) + angleAdd);
             return Math.toDegrees(Math.atan(width / height)) + angleAdd;
         }
         else{ //if the robot isn't stationary
@@ -162,7 +163,7 @@ public class SingularitySwerveVisualizer extends Application {
         double horizontal = currentX;
         double vertical = currentY;
         //double rotation = currentRotate;
-        double rotation = 0;
+        double rotation = currentRotate;
         double rotate = (robot.getRotate());
         //System.out.println(currentX);
         //double horizontal = 10;
@@ -175,23 +176,38 @@ public class SingularitySwerveVisualizer extends Application {
         double midToOutSize = distance(halfRobotWidth, halfRobotHeight, 0, 0); // distance between robot center and any
                                                                                // of the wheels
 
-        double mFL_XPos_Curr = -halfRobotWidth;
-        double mFL_YPos_Curr = halfRobotHeight;
-
-        double mFR_XPos_Curr = halfRobotWidth;
-        double mFR_YPos_Curr = halfRobotHeight;
-
-        double mBL_XPos_Curr = -halfRobotWidth;
-        double mBL_YPos_Curr = -halfRobotHeight;
-
-        double mBR_XPos_Curr = halfRobotWidth;
-        double mBR_YPos_Curr = -halfRobotHeight;
-
         double mBR_Offset_Angle = Math.atan(ROBOT_LENGTH / ROBOT_WIDTH); // Angle for offsetting wheel positions along the
-                                                                       // circle with radius midToOutSize
-        double mFR_Offset_Angle = -mBR_Offset_Angle; // " " but negative
-        double mFL_Offset_Angle = mBR_Offset_Angle + Math.PI; // complement ( +180 degrees ) of the first one
-        double mBL_Offset_Angle = mFR_Offset_Angle + Math.PI; // " " but of the second one
+                                                                               // circle with radius midToOutSize
+        double mFR_Offset_Angle = -mBR_Offset_Angle; // 
+        double mFL_Offset_Angle = mBR_Offset_Angle + Math.PI; // 
+        double mBL_Offset_Angle = -1.0 * Math.atan(ROBOT_LENGTH/ROBOT_WIDTH); // 
+
+
+        double mFL_XPos_Curr = (midToOutSize * Math.cos(-(rotate) - mFL_Offset_Angle));
+        double mFL_YPos_Curr = (midToOutSize * Math.sin(-(rotate) - mFL_Offset_Angle));
+
+        double mFR_XPos_Curr = (midToOutSize * Math.cos(-(rotate) - mFR_Offset_Angle));
+        double mFR_YPos_Curr = (midToOutSize * Math.sin(-(rotate) - mFR_Offset_Angle));
+
+        double mBL_XPos_Curr = (midToOutSize * Math.cos(-(rotate) - mBL_Offset_Angle));
+        double mBL_YPos_Curr = (midToOutSize * Math.sin(-(rotate) - mBL_Offset_Angle));
+
+        double mBR_XPos_Curr = (midToOutSize * Math.cos(-(rotate) - mBR_Offset_Angle));
+        double mBR_YPos_Curr = (midToOutSize * Math.sin(-(rotate) - mBR_Offset_Angle));
+
+        /*double mFL_XPos_Curr_Rotate = ;
+        double mFR_XPos_Curr_Rotate = (midToOutSize * Math.cos(-(rotate) - mFR_Offset_Angle));
+        double mBL_XPos_Curr_Rotate = (midToOutSize * Math.cos(-(rotate) - mBL_Offset_Angle));
+        double mBR_XPos_Curr_Rotate = (midToOutSize * Math.cos(-(rotate) - mBR_Offset_Angle));
+
+        double mFL_YPos_Curr_Rotate = (midToOutSize * Math.sin(-(rotate) - mFL_Offset_Angle));
+        double mFR_YPos_Curr_Rotate = (midToOutSize * Math.sin(-(rotate) - mFR_Offset_Angle));
+        double mBL_YPos_Curr_Rotate = (midToOutSize * Math.sin(-(rotate) - mBL_Offset_Angle));
+        double mBR_YPos_Curr_Rotate = (midToOutSize * Math.sin(-(rotate) - mBR_Offset_Angle));*/
+
+
+
+
 
 
         double mFL_XPos_Next = horizontal
