@@ -119,24 +119,24 @@ public class SingularitySwerveVisualizer extends Application {
     }
 
     private static double getAngleIfStill(double horizontal, double vertical, double xNext, double yNext, double xCurr, double yCurr, double height, double width, double angleAdd, double localToGlobal){
-        if(horizontal <= .001 && vertical <= .001){ //check to see if robot is stationary
+        if( (horizontal <= .001 && horizontal >= -.001) && (vertical <= .001 && vertical >= -.001) ){ //check to see if robot is stationary
                 //System.out.println(Math.toDegrees(Math.atan(width / height)) + angleAdd);
             return Math.toDegrees(Math.atan(width / height)) + angleAdd;
         }
         else{ //if the robot isn't stationary
-            if(xNext < 0){
-                return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr)) - localToGlobal) + 180;
-            }
-            else if(xNext > 0){
-                return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr))  - localToGlobal);
-            }
-            else{ //xNext == 0
-                if(yNext < 0){
-                        return 270;
+            if(horizontal == 0){ //no horizontal movement
+                if(vertical < 0){
+                        return 270 - localToGlobal;
                 }
                 else{
-                        return 90;
+                        return 90 - localToGlobal;
                 }
+            }
+            else if(xNext < xCurr){
+                return 180 + Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr)) - localToGlobal);
+            }
+            else{ 
+                return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr)) - localToGlobal);
                 
             }
             //return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr)));
@@ -146,11 +146,12 @@ public class SingularitySwerveVisualizer extends Application {
     
 
     private static double getDistanceIfStill(double horizontal, double vertical, double xNext, double yNext, double xCurr, double yCurr, double rotationSpeed ){
-        if(horizontal <= .001 && vertical <= .001){ //if they're basically zero
+        if( (horizontal <= .001 && horizontal >= -.001) && (vertical <= .001 && vertical >= -.001) ){ //if they're basically zero
                 return rotationSpeed;
         }
         else{
                 return distance(xNext, yNext, xCurr, yCurr);
+                //return 1;
         }
         
     }
@@ -165,6 +166,7 @@ public class SingularitySwerveVisualizer extends Application {
         //double rotation = currentRotate;
         double rotation = currentRotate;
         double rotate = (robot.getRotate());
+        //double rotate = -0.5;
         //System.out.println(currentX);
         //double horizontal = 10;
         //double vertical = -10;
@@ -194,6 +196,9 @@ public class SingularitySwerveVisualizer extends Application {
 
         double mBR_XPos_Curr = (midToOutSize * Math.cos(-(rotate) - mBR_Offset_Angle));
         double mBR_YPos_Curr = (midToOutSize * Math.sin(-(rotate) - mBR_Offset_Angle));
+        System.out.println(mBR_XPos_Curr);
+        System.out.println(mBR_YPos_Curr);
+
 
         /*double mFL_XPos_Curr_Rotate = ;
         double mFR_XPos_Curr_Rotate = (midToOutSize * Math.cos(-(rotate) - mFR_Offset_Angle));
@@ -230,6 +235,9 @@ public class SingularitySwerveVisualizer extends Application {
         double mBR_YPos_Next = vertical
                 + (midToOutSize * Math.sin(-(rotation * rotationSpeedConstant) - mBR_Offset_Angle));
 
+        //System.out.println(mBR_XPos_Next);
+        //System.out.println(mBR_YPos_Next);
+
 
         
 
@@ -237,20 +245,25 @@ public class SingularitySwerveVisualizer extends Application {
         // these slopes:
         //double mFL_Angle = Math.atan((mFL_YPos_Next - mFL_YPos_Curr) / (mFL_XPos_Next - mFL_XPos_Curr)); ROBOT_WIDTH
 
-        double mFR_Angle = getAngleIfStill(horizontal, vertical, mFR_XPos_Next, mFR_YPos_Next, -mFR_XPos_Curr, -mFR_XPos_Curr, ROBOT_LENGTH, ROBOT_WIDTH, 90, rotate);
-        double mFL_Angle = getAngleIfStill(horizontal, vertical, mFL_XPos_Next, mFL_YPos_Next, mFL_XPos_Curr, mFL_XPos_Curr, ROBOT_WIDTH, ROBOT_LENGTH, 180, rotate);
-        double mBL_Angle = getAngleIfStill(horizontal, vertical, mBL_XPos_Next, mBL_YPos_Next, -mBL_XPos_Curr, -mBL_XPos_Curr, ROBOT_LENGTH, ROBOT_WIDTH, 270, rotate);
-        double mBR_Angle = getAngleIfStill(horizontal, vertical, mBR_XPos_Next, mBR_YPos_Next, mBR_XPos_Curr, mBR_XPos_Curr, ROBOT_WIDTH, ROBOT_LENGTH, 0, rotate);
+        double mFR_Angle = getAngleIfStill(horizontal, vertical, mFR_XPos_Next, mFR_YPos_Next, mFR_XPos_Curr, mFR_YPos_Curr, ROBOT_LENGTH, ROBOT_WIDTH, 90, Math.toDegrees(rotate));
+        double mFL_Angle = getAngleIfStill(horizontal, vertical, mFL_XPos_Next, mFL_YPos_Next, mFL_XPos_Curr, mFL_YPos_Curr, ROBOT_WIDTH, ROBOT_LENGTH, 180, Math.toDegrees(rotate));
+        double mBL_Angle = getAngleIfStill(horizontal, vertical, mBL_XPos_Next, mBL_YPos_Next, mBL_XPos_Curr,mBL_YPos_Curr, ROBOT_LENGTH, ROBOT_WIDTH, 270, Math.toDegrees(rotate));
+        double mBR_Angle = getAngleIfStill(horizontal, vertical, mBR_XPos_Next, mBR_YPos_Next, mBR_XPos_Curr, mBR_YPos_Curr, ROBOT_WIDTH, ROBOT_LENGTH, 0, Math.toDegrees(rotate));
 
-        //double mFL_Angle = 90;
-        //double mFR_Angle = 90;
-        //double mBL_Angle = 90;
-        //double mBR_Angle = 90;
+        //System.out.println(Math.atan((mBR_YPos_Next-)/()) );
+        //double testAngle = getAngleIfStill(1, 1, -1, .5, .5, .5, ROBOT_WIDTH, ROBOT_LENGTH, 0, 0);
+
+        /*double mFL_Angle = getAngleIfStill(0, 0, 1, 1, 2, 2, ROBOT_WIDTH, ROBOT_LENGTH, 0, 0);
+        double mFR_Angle = getAngleIfStill(0, 0, 1, 1, 2, 2, ROBOT_WIDTH, ROBOT_LENGTH, 0, 0);
+        double mBL_Angle = getAngleIfStill(0, 0, 1, 1, 2, 2, ROBOT_WIDTH, ROBOT_LENGTH, 0, 0);
+        double mBR_Angle = getAngleIfStill(10, 10, 17.5, 2.5, 10.178, -2.986, ROBOT_WIDTH, ROBOT_LENGTH, 0, 0);*/
+        //System.out.println(Math.toDegrees(Math.atan((-15.55-(-2.986))/(9.45-10.178))) );
 
         double mFR_Distance = getDistanceIfStill(horizontal, vertical,  mFR_XPos_Next, mFR_YPos_Next, mFR_XPos_Curr, mFR_YPos_Curr, rotation);
         double mFL_Distance = getDistanceIfStill(horizontal, vertical,  mFL_XPos_Next, mFL_YPos_Next, mFL_XPos_Curr, mFL_YPos_Curr, rotation);
         double mBL_Distance = getDistanceIfStill(horizontal, vertical,  mBL_XPos_Next, mBL_YPos_Next, mBL_XPos_Curr, mBL_YPos_Curr, rotation);
         double mBR_Distance = getDistanceIfStill(horizontal, vertical,  mBR_XPos_Next, mBR_YPos_Next, mBR_XPos_Curr, mBR_YPos_Curr, rotation);
+        //System.out.println(Math.atan( (.5-mBR_YPos_Curr)/(-1.0-mBR_YPos_Curr) ));
 
         //double mFR_Distance = 1;
         //double mFL_Distance = 1;
