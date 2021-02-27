@@ -59,7 +59,7 @@ public class Robot {
             accelerationVector = accelerationVector.add(wheel.getPosition());
             rotationalAcceleration += (Math.PI/2) * Math.sin(wheel.getPosition().rotation() - defaults.getWheel(wheel.getLocation()).getPosition().rotation());
         }
-        rotationalAcceleration *= accelerationVector.length();
+        //rotationalAcceleration *= accelerationVector.length();
         return renderWheels(wheels);
     }
 
