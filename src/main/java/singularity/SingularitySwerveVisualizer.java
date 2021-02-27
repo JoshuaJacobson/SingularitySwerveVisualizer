@@ -28,8 +28,8 @@ public class SingularitySwerveVisualizer extends Application {
     private static FieldRenderer renderer;
     private static Pane lines;
     private static long startNanoTime;
-    private static final double ROBOT_LENGTH = 15.0;
-    private static final double ROBOT_WIDTH = 15.0;
+    private static final double ROBOT_LENGTH = 2;
+    private static final double ROBOT_WIDTH = 1;
     private static double currentX;
     private static double currentY;
     private static double currentRotate;
@@ -118,7 +118,7 @@ public class SingularitySwerveVisualizer extends Application {
         return (Math.sqrt((Math.pow((x2 - x1), 2) + Math.pow((y2 - y1), 2))));
     }
 
-    private static double getAngleIfStill(double horizontal, double vertical, double xNext, double yNext, double xCurr, double yCurr, double height, double width, double angleAdd, double localToGlobal){
+    private static double getAngleIfStill(double horizontal, double vertical, double xNext, double yNext, double xCurr, double yCurr, double height, double width, double angleAdd, double localToGlobal){ //LOCALTOGLOBAL IN DEGREES
         if( (horizontal <= .001 && horizontal >= -.001) && (vertical <= .001 && vertical >= -.001) ){ //check to see if robot is stationary
                 //System.out.println(Math.toDegrees(Math.atan(width / height)) + angleAdd);
             return Math.toDegrees(Math.atan(width / height)) + angleAdd;
@@ -127,17 +127,24 @@ public class SingularitySwerveVisualizer extends Application {
             if(horizontal == 0){ //no horizontal movement
                 if(vertical < 0){
                         return 270 - localToGlobal;
-                }
+                }//:)
                 else{
                         return 90 - localToGlobal;
                 }
             }
             else if(xNext < xCurr){
-                return 180 + Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr)) - localToGlobal);
+                return 180 + Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr))) - localToGlobal;
             }
-            else{ 
-                return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr)) - localToGlobal);
-                
+            else if(xNext > xCurr){ 
+                return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr))) - localToGlobal;
+            }
+            else{ // xNext == xCurr gives atan divide by zero error
+                if(yNext > yCurr){ //going up
+                        return 90 - localToGlobal;
+                }
+                else{
+                        return 270 - localToGlobal;
+                }
             }
             //return Math.toDegrees(Math.atan((yNext - yCurr) / (xNext - xCurr)));
                 
@@ -164,8 +171,11 @@ public class SingularitySwerveVisualizer extends Application {
         double horizontal = currentX;
         double vertical = currentY;
         //double rotation = currentRotate;
-        double rotation = currentRotate;
-        double rotate = (robot.getRotate());
+        
+        
+        //double rotate = (robot.getRotate());
+        double rotate = -.1;
+        double rotation = rotate + .1;
         //double rotate = -0.5;
         //System.out.println(currentX);
         //double horizontal = 10;
@@ -196,6 +206,28 @@ public class SingularitySwerveVisualizer extends Application {
 
         double mBR_XPos_Curr = (midToOutSize * Math.cos(-(rotate) - mBR_Offset_Angle));
         double mBR_YPos_Curr = (midToOutSize * Math.sin(-(rotate) - mBR_Offset_Angle));
+
+        /*double mFL_XPos_Curr = -.597;
+        double mFL_YPos_Curr = .945;
+
+        double mFR_XPos_Curr = .398;
+        double mFR_YPos_Curr = 1.045;
+
+        double mBL_XPos_Curr = -.398; //THESE ARE NOT BEING CALCULATED AS NEGATIVE VALUES: TO BE FIXED ON 27/FEB/2021 
+        double mBL_YPos_Curr = -1.045;
+
+        double mBR_XPos_Curr = .597;
+        double mBR_YPos_Curr = -.945;*/
+
+        System.out.println(mFL_XPos_Curr);
+        System.out.println(mFL_YPos_Curr);
+
+        System.out.println(mFR_XPos_Curr);
+        System.out.println(mFR_YPos_Curr);
+
+        System.out.println(mBL_XPos_Curr);
+        System.out.println(mBL_YPos_Curr);
+
         System.out.println(mBR_XPos_Curr);
         System.out.println(mBR_YPos_Curr);
 
@@ -215,7 +247,7 @@ public class SingularitySwerveVisualizer extends Application {
 
 
 
-        double mFL_XPos_Next = horizontal
+        /*double mFL_XPos_Next = horizontal
                 + (midToOutSize * Math.cos(-(rotation * rotationSpeedConstant) - mFL_Offset_Angle));
         double mFL_YPos_Next = vertical
                 + (midToOutSize * Math.sin(-(rotation * rotationSpeedConstant) - mFL_Offset_Angle));
@@ -233,10 +265,28 @@ public class SingularitySwerveVisualizer extends Application {
         double mBR_XPos_Next = horizontal
                 + (midToOutSize * Math.cos(-(rotation * rotationSpeedConstant) - mBR_Offset_Angle));
         double mBR_YPos_Next = vertical
-                + (midToOutSize * Math.sin(-(rotation * rotationSpeedConstant) - mBR_Offset_Angle));
+                + (midToOutSize * Math.sin(-(rotation * rotationSpeedConstant) - mBR_Offset_Angle));*/
+
+
+
+
+        double mFL_XPos_Next = 2.1;
+
+        double mFL_YPos_Next = 3.07;
+
+        double mFR_XPos_Next = 3.1;
+        double mFR_YPos_Next = 3.07;
+
+        double mBL_XPos_Next = 2.1;
+        double mBL_YPos_Next = 1.07;
+
+        double mBR_XPos_Next = 3.1;
+        double mBR_YPos_Next = 1.07;
 
         //System.out.println(mBR_XPos_Next);
         //System.out.println(mBR_YPos_Next);
+
+        
 
 
         
@@ -253,16 +303,22 @@ public class SingularitySwerveVisualizer extends Application {
         //System.out.println(Math.atan((mBR_YPos_Next-)/()) );
         //double testAngle = getAngleIfStill(1, 1, -1, .5, .5, .5, ROBOT_WIDTH, ROBOT_LENGTH, 0, 0);
 
+        
+        /*System.out.println(mFR_Angle);
+        System.out.println(mFL_Angle);
+        System.out.println(mBL_Angle);
+        System.out.println(mBR_Angle);*/
+
         /*double mFL_Angle = getAngleIfStill(0, 0, 1, 1, 2, 2, ROBOT_WIDTH, ROBOT_LENGTH, 0, 0);
         double mFR_Angle = getAngleIfStill(0, 0, 1, 1, 2, 2, ROBOT_WIDTH, ROBOT_LENGTH, 0, 0);
         double mBL_Angle = getAngleIfStill(0, 0, 1, 1, 2, 2, ROBOT_WIDTH, ROBOT_LENGTH, 0, 0);
         double mBR_Angle = getAngleIfStill(10, 10, 17.5, 2.5, 10.178, -2.986, ROBOT_WIDTH, ROBOT_LENGTH, 0, 0);*/
         //System.out.println(Math.toDegrees(Math.atan((-15.55-(-2.986))/(9.45-10.178))) );
 
-        double mFR_Distance = getDistanceIfStill(horizontal, vertical,  mFR_XPos_Next, mFR_YPos_Next, mFR_XPos_Curr, mFR_YPos_Curr, rotation);
-        double mFL_Distance = getDistanceIfStill(horizontal, vertical,  mFL_XPos_Next, mFL_YPos_Next, mFL_XPos_Curr, mFL_YPos_Curr, rotation);
-        double mBL_Distance = getDistanceIfStill(horizontal, vertical,  mBL_XPos_Next, mBL_YPos_Next, mBL_XPos_Curr, mBL_YPos_Curr, rotation);
-        double mBR_Distance = getDistanceIfStill(horizontal, vertical,  mBR_XPos_Next, mBR_YPos_Next, mBR_XPos_Curr, mBR_YPos_Curr, rotation);
+        double mFR_Distance = getDistanceIfStill(horizontal, vertical,  mFR_XPos_Next, mFR_YPos_Next, mFR_XPos_Curr, mFR_YPos_Curr, currentRotate);
+        double mFL_Distance = getDistanceIfStill(horizontal, vertical,  mFL_XPos_Next, mFL_YPos_Next, mFL_XPos_Curr, mFL_YPos_Curr, currentRotate);
+        double mBL_Distance = getDistanceIfStill(horizontal, vertical,  mBL_XPos_Next, mBL_YPos_Next, mBL_XPos_Curr, mBL_YPos_Curr, currentRotate);
+        double mBR_Distance = getDistanceIfStill(horizontal, vertical,  mBR_XPos_Next, mBR_YPos_Next, mBR_XPos_Curr, mBR_YPos_Curr, currentRotate);
         //System.out.println(Math.atan( (.5-mBR_YPos_Curr)/(-1.0-mBR_YPos_Curr) ));
 
         //double mFR_Distance = 1;
